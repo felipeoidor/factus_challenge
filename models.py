@@ -1,11 +1,15 @@
 import requests
 from config import (
     URL_AUTHENTICATION,
+    URL_REFRESH_TOKEN,
+    URL_NUMBERING_RANGE,
     HEADER_AUTHENTICATION,
     AUTHENTICATION_PAYLOAD,
     refresh_header,
     refresh_body,
+    numbering_range_header,
 )
+
 
 # Get authentication tokens
 def get_token():
@@ -22,11 +26,12 @@ def get_token():
     except requests.exceptions.RequestException as error:
         return {"Error": str(error)}
 
-# Refresh Token 
-def refresh_token(access_token, refresh_token):
+
+# Refresh Token
+def renew_token(access_token, refresh_token):
     try:
         response = requests.post(
-            URL_AUTHENTICATION,
+            URL_REFRESH_TOKEN,
             headers=refresh_header(access_token),
             data=refresh_body(refresh_token),
         )
@@ -36,3 +41,12 @@ def refresh_token(access_token, refresh_token):
 
     except requests.exceptions.RequestException as error:
         return {"Error": str(error)}
+
+
+# Numbering range
+def get_numbering_range(access_token):
+    response = requests.get(
+        URL_NUMBERING_RANGE, headers=numbering_range_header(access_token)
+    )
+
+    return response.json().get("data").get("data")
