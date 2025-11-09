@@ -73,3 +73,22 @@ def refresh_body(refresh_token: str) -> dict:
         "client_secret": os.getenv("CLIENT_SECRET"),
         "refresh_token": refresh_token,
     }
+
+
+# Generate the HTTP headers required for obtain numbering range
+def numbering_range_header(access_token: str) -> dict:
+    """
+    Return a dictionary containing the Authorization header
+    required to obtain numbering range.
+
+    Parameters:
+        access_token (str): The current access token.
+
+    Returns:
+        dict: HTTP headers including Content-type, Authorization and Accept.
+    """
+    return {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}",
+        "Accept": "application/json",
+    }
