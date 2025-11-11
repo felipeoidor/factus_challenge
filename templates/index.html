@@ -12,6 +12,16 @@
                     <option>{{ option }}</option>
                 {% endfor %}
             </select>
+            <select>
+                {% for option in department %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
+            <select>
+                {% for option in municipality %}
+                <option value="{{ option }}"> {{ option }} </option>
+                {% endfor %}
+            </select>
         </form>
     </body>
 </html>
