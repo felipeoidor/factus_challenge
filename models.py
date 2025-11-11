@@ -3,6 +3,7 @@ from config import (
     URL_AUTHENTICATION,
     URL_REFRESH_TOKEN,
     URL_NUMBERING_RANGE,
+    URL_MUNICIPALITY,
     HEADER_AUTHENTICATION,
     AUTHENTICATION_PAYLOAD,
     refresh_header,
@@ -50,3 +51,14 @@ def get_numbering_range(access_token):
     )
 
     return response.json().get("data").get("data")
+
+
+# Municipality
+def get_municipality(access_token):
+    response = requests.get(
+        URL_MUNICIPALITY,
+        # I'll use the numbering range header for now
+        headers=numbering_range_header(access_token),
+    )
+
+    return response.json().get("data")
