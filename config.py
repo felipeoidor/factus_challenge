@@ -22,10 +22,11 @@ def get_endpoints():
 # Load API endpoints
 ENDPOINTS = get_endpoints()
 
-# URL Endpoint for obtaining an access token
+# URL Endpoints
 URL_AUTHENTICATION = ENDPOINTS.get("authentication")
 URL_REFRESH_TOKEN = ENDPOINTS.get("refresh_token")
 URL_NUMBERING_RANGE = ENDPOINTS.get("numbering_range")
+URL_MUNICIPALITY = ENDPOINTS.get("municipality")
 
 # Header for authentication requests
 HEADER_AUTHENTICATION = {"Accept": "application/json"}
