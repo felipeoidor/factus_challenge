@@ -1,95 +1,23 @@
-import json
 import os
+from utils.json_loader import load_json
 from dotenv import load_dotenv
 
 
-# Load environment variables from a .env file
-load_dotenv()
+# Authorization Payload
+def auth_payload() -> dict:
+    load_dotenv()
+    auth = load_json("config/payloads.json").get("auth_payload")
+    auth["client_id"] = os.getenv("CLIENT_ID")
+    auth["client_secret"] = os.getenv("CLIENT_SECRET")
+    auth["username"] = os.getenv("USERNAME")
+    auth["password"] = os.getenv("PASSWORD")
+    return auth
 
 
-# Load API endpoints from the JSON configuration file
-def get_endpoints():
-    """
-    Load and return a dictionary mapping endpoint types to their URLs
-    from the 'endpoints.json' configuration file.
-    """
-    with open("endpoints.json", "r", encoding="UTF-8") as file:
-        endpoints = json.load(file)
-        urls = endpoints.get("endpoints")
-        return {endpoint["type"]: endpoint["url"] for endpoint in urls}
-
-
-# Load API endpoints
-ENDPOINTS = get_endpoints()
-
-# URL Endpoints
-URL_AUTHENTICATION = ENDPOINTS.get("authentication")
-URL_REFRESH_TOKEN = ENDPOINTS.get("refresh_token")
-URL_NUMBERING_RANGE = ENDPOINTS.get("numbering_range")
-URL_MUNICIPALITY = ENDPOINTS.get("municipality")
-
-# Header for authentication requests
-HEADER_AUTHENTICATION = {"Accept": "application/json"}
-
-# Body payload for authentication requests
-AUTHENTICATION_PAYLOAD = {
-    "grant_type": "password",
-    "client_id": os.getenv("CLIENT_ID"),
-    "client_secret": os.getenv("CLIENT_SECRET"),
-    "username": os.getenv("USERNAME"),
-    "password": os.getenv("PASSWORD"),
-}
-
-
-# Generate the HTTP headers required for a refresh token request
-def refresh_header(access_token: str) -> dict:
-    """
-    Return a dictionary containing  the Authorization header
-    required to use the provided access token in a request.
-
-    Parameters:
-        access_token (str): The current access token.
-
-    Returns:
-        dict: HTTP headers including Authorization and Accept.
-    """
-    return {"Authorization": f"Bearer {access_token}", "Accept": "application/json"}
-
-
-# Body payload for refresh tokens
-def refresh_body(refresh_token: str) -> dict:
-    """
-    Return a dictionary payload for refreshing an access token
-    using the provided refresh token.
-
-    Parameters:
-        refresh_token (str): The Refresh token issued previously.
-
-    Returns:
-        dict: Payload containing grant_type, client_id, client_secret and refresh token.
-    """
-    return {
-        "grant_type": "refresh_token",
-        "client_id": os.getenv("CLIENT_ID"),
-        "client_secret": os.getenv("CLIENT_SECRET"),
-        "refresh_token": refresh_token,
-    }
-
-
-# Generate the HTTP headers required for obtain numbering range
-def numbering_range_header(access_token: str) -> dict:
-    """
-    Return a dictionary containing the Authorization header
-    required to obtain numbering range.
-
-    Parameters:
-        access_token (str): The current access token.
-
-    Returns:
-        dict: HTTP headers including Content-type, Authorization and Accept.
-    """
-    return {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {access_token}",
-        "Accept": "application/json",
-    }
+def refresh_payload(refresh_token: str):
+    load_dotenv()
+    refresh = load_json("config/payloads.json").get("refresh_payload")
+    refresh["client_id"] = os.getenv("CLIENT_ID")
+    refresh["client_secret"] = os.getenv("CLIENT_SECRET")
+    refresh["refresh_token"] = refresh_token
+    return refresh
