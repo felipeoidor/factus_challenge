@@ -1,64 +1,57 @@
 import requests
+from utils.json_loader import load_json
 from config import (
-    URL_AUTHENTICATION,
-    URL_REFRESH_TOKEN,
-    URL_NUMBERING_RANGE,
-    URL_MUNICIPALITY,
-    HEADER_AUTHENTICATION,
-    AUTHENTICATION_PAYLOAD,
-    refresh_header,
-    refresh_body,
-    numbering_range_header,
+    auth_payload,
+    refresh_payload,
 )
 
 
-# Get authentication tokens
-def get_token():
-    try:
-        response = requests.post(
-            URL_AUTHENTICATION,
-            headers=HEADER_AUTHENTICATION,
-            data=AUTHENTICATION_PAYLOAD,
-        )
-        response.raise_for_status()
-        tokens = response.json()
-        return tokens
-
-    except requests.exceptions.RequestException as error:
-        return {"Error": str(error)}
-
-
-# Refresh Token
-def renew_token(access_token, refresh_token):
-    try:
-        response = requests.post(
-            URL_REFRESH_TOKEN,
-            headers=refresh_header(access_token),
-            data=refresh_body(refresh_token),
-        )
-        response.raise_for_status()
-        tokens = response.json()
-        return tokens
-
-    except requests.exceptions.RequestException as error:
-        return {"Error": str(error)}
-
-
-# Numbering range
-def get_numbering_range(access_token):
-    response = requests.get(
-        URL_NUMBERING_RANGE, headers=numbering_range_header(access_token)
+def fetch_auth_token(get: str = None) -> dict:
+    endpoint = load_json(json_file="config/endpoints.json", get="authentication").get(
+        "endpoint"
     )
+    header = load_json("config/headers.json").get("auth_header")
+    payload = auth_payload()
+    response = requests.post(endpoint, headers=header, data=payload)
 
-    return response.json().get("data").get("data")
+    if response.status_code == 200:
+        data = response.json()
+        if get is None:
+            return data
+
+        return data.get(get)
 
 
-# Municipality
-def get_municipality(access_token):
-    response = requests.get(
-        URL_MUNICIPALITY,
-        # I'll use the numbering range header for now
-        headers=numbering_range_header(access_token),
+def renew_token(access_token: str, refresh_token) -> dict:
+    endpoint = load_json(json_file="config/endpoints.json", get="refresh_token").get(
+        "endpoint"
     )
+    header = load_json("config/headers.json").get("refresh_token")
+    header["Authorization"] = f"Bearer {access_token}"
+    payload = refresh_payload(refresh_token)
+    response = requests.post(endpoint, headers=header, data=payload)
 
-    return response.json().get("data")
+    if response.status_code == 200:
+        return response.json()
+
+
+def base_header(tokens):
+    access_token = tokens
+    header = load_json("config/headers.json").get("base_header")
+    header["Authorization"] = f"Bearer {access_token}"
+    return header
+
+
+def get_requests(url, header):
+    endpoint = url
+    header_request = header
+    response = requests.get(endpoint, headers=header_request)
+
+    return response
+
+
+def fetch_catalog_data(endpoint, header):
+    response = get_requests(endpoint, header)
+
+    if response.status_code == 200:
+        return response.json()
