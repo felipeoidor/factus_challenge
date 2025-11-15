@@ -1,0 +1,14 @@
+{
+    "auth_header": {
+        "Accept": "application/jso"
+    },
+    "refresh_token":{
+        "Authorization": "",
+        "Accept":  "application/jso"
+    },
+    "base_header":{
+        "Content-Type": "application/json",
+        "Authorization": "",
+        "Accept": "application/json"
+    }
+}
