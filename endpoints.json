@@ -1,9 +1,0 @@
-{
-    "endpoints":[
-        {"type": "authentication", "url": "https://api-sandbox.factus.com.co/oauth/token"},
-        {"type": "refresh_token", "url": "https://api-sandbox.factus.com.co/oauth/token"},
-        {"type": "numbering_range", "url": "https://api-sandbox.factus.com.co/v1/numbering-ranges?filter[id]&filter[document]&filter[resolution_number]&filter[technical_key]&filter[is_active]"},
-        {"type": "municipality", "url": "https://api-sandbox.factus.com.co/v1/municipalities"}
-    ]
-    
-}
