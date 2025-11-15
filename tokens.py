@@ -1,11 +1,6 @@
-from models import get_token, renew_token
+from models import fetch_auth_token, renew_token
 
-
-
-tokens = get_token()
-access_token = tokens.get("access_token")
-refresh_token = tokens.get("refresh_token")
-
-new_tokens = renew_token(access_token, refresh_token)
-refreshed_access_token = new_tokens.get("access_token")
-refreshed_token = new_tokens.get("refresh_token")
+auth_token = fetch_auth_token()
+access_token = auth_token.get("access_token")
+refresh_token = auth_token.get("refresh_token")
+refreshed_token = renew_token(access_token, refresh_token).get("access_token")
