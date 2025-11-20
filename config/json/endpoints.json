@@ -1,0 +1,20 @@
+{   
+    "authentication": {
+        "endpoint": "https://api-sandbox.factus.com.co/oauth/token" 
+    },
+    "refresh_token": {
+        "endpoint": "https://api-sandbox.factus.com.co/oauth/token"
+    },
+    "numbering_range": {
+        "endpoint": "https://api-sandbox.factus.com.co/v1/numbering-ranges?filter[id]&filter[document]&filter[resolution_number]&filter[technical_key]&filter[is_active]"
+    },
+    "municipality": {
+        "endpoint": "https://api-sandbox.factus.com.co/v1/municipalities"
+    },
+    "tributes": {
+        "endpoint": "https://api-sandbox.factus.com.co/v1/tributes/products?name=" 
+    },
+    "measurement units": {
+        "endpoint": "https://api-sandbox.factus.com.co/v1/measurement-units" 
+    }
+}
